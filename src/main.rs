@@ -3,9 +3,11 @@ use std::sync::atomic::{AtomicBool, Ordering};
 
 static WHINGE_MODE: AtomicBool = AtomicBool::new(false);
 
-fn main() {
+fn main() -> Result<(), u8>  {
     println!("Hello, world!");
 
+    // return Ok(()) for success
+    Ok(())
 }
 
 fn parse_args(config_file_name: &mut String) -> Result<(), u8> {
