@@ -1,7 +1,5 @@
-use std::env;
-use std::sync::atomic::{AtomicBool, Ordering};
-
-static WHINGE_MODE: AtomicBool = AtomicBool::new(false);
+mod declarations;
+include!("declarations.rs");
 
 fn main() -> Result<(), u8>  {
 
@@ -28,4 +26,18 @@ fn parse_args(config_file_name: &mut String) -> Result<(), u8> {
 
 fn usage(program_name: &String) {
     println!("usage: {} <configuration_file_name> [whinge]", program_name);
+}
+
+fn recite(title: &String,  play: &Play) {
+
+    println!("Title is: {}", title);
+
+    // need to change play.1
+    match play {
+
+        (_, x, _) => println!("{}", ),
+
+    }
+
+
 }
