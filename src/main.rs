@@ -5,8 +5,6 @@ static WHINGE_MODE: AtomicBool = AtomicBool::new(false);
 
 fn main() -> Result<(), u8>  {
     println!("Hello, world!");
-
-    // return Ok(()) for success
     Ok(())
 }
 
