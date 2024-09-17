@@ -4,9 +4,7 @@ use std::sync::atomic::{AtomicBool, Ordering};
 static WHINGE_MODE: AtomicBool = AtomicBool::new(false);
 
 fn main() -> Result<(), u8>  {
-    // we don't need to print hello world
 
-    // return Ok(()) for success
     Ok(())
 }
 
