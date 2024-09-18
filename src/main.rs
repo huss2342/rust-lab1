@@ -49,13 +49,11 @@ fn recite(title: &String,  play: &Play) {
             // if character doesn't match, assign current character and print blank line
             (line_num, character, line) => {
                 if Some(character) != current_character {
-                    if let Some(_) = current_character {
-                        println!();
-                    }
+                    println!();
                     // print current character with "." and update current_character
                     println!("{}.", character);
-                    current_character = Some(character());
-                } else {}
+                    current_character = Some(character);
+                }
                 // print current character's lines
                 println!("{}", line);
             }
