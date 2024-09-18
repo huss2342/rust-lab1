@@ -1,7 +1,6 @@
 use std::env;
 use std::sync::atomic::{AtomicBool, Ordering};
 
-
 type LineNum = usize;
 type CharName = String;
 type Line = String;
