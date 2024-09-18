@@ -1,8 +1,16 @@
 mod declarations;
 include!("declarations.rs");
+//
+// specificly instructed to add above main?
+// use std::env;
+// use std::sync::atomic::{AtomicBool, Ordering};
+
+// static WHINGE_MODE: AtomicBool = AtomicBool::new(false);
 
 fn main() -> Result<(), u8>  {
+    println!("Hello, world!");
 
+    // return Ok(()) for success
     Ok(())
 }
 
@@ -32,12 +40,25 @@ fn recite(title: &String,  play: &Play) {
 
     println!("Title is: {}", title);
 
-    // need to change play.1
-    match play {
+    // initialize variable for current character
+    let mut current_character: Option<&CharName> = None;
 
-        (_, x, _) => println!("{}", ),
-
+    for line_tuple in play {
+        match line_tuple {
+            // if character doesn't match, assign current character and print blank line
+            (line_num, character, line) => {
+                if Some(character) != current_character {
+                    if let Some(_) = current_character {
+                        println!();
+                    }
+                    // print current character with "." and update current_character
+                    println!("{}.", character);
+                    current_character = Some(character());
+                } else {}
+                // print current character's lines
+                println!("{}", line);
+            }
+        }
     }
-
-
 }
+
