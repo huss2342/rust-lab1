@@ -1,12 +1,10 @@
+use std::env;
+
 mod declarations;
+mod script_gen;
 
 include!("declarations.rs");
-//
-// specificly instructed to add above main?
-// use std::env;
-// use std::sync::atomic::{AtomicBool, Ordering};
-
-// static WHINGE_MODE: AtomicBool = AtomicBool::new(false);
+include!("script_gen.rs");
 
 fn main() -> Result<(), u8>  {
     println!("Hello, world!");
