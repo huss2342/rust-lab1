@@ -1,17 +1,17 @@
 use std::fs::File;
 use std::io::{BufReader, BufRead};
+use crate::declarations::{Play, CharName, WHINGE_MODE, Ordering};
 
 type CharacterTextFile = String;
-type PlayConfig = Vec((CharName, CharacterTextFile));
+type PlayConfig = Vec<(CharName, CharacterTextFile)>;
 
 static TITLE_LINE : usize = 0;
 static CHARACTER_CONFIG_LINE : usize = 1;
-static CHARACTER_CONFIG_LINE_INDEX : usize = 0;
+static CHARACTER_NAME_CONFIG_LINE_INDEX : usize = 0;
 static CHARACTER_FILE_CONFIG_LINE_INDEX : usize = 1;
 static CONFIG_LINE_TOKENS : usize = 2;
 
-// TODO: param3: "the name of the character's part", what type is that? what even is that? &String?
-fn add_script_line(play : &mut Play, line : &Line, char_part_name : &CharName) {
+fn add_script_line(play : &mut Play, line : &String, char_part_name : &String) {
 
     if line.len() > 0 {
         if let Some((first_token, rest_of_line)) = line.split_once(char::is_whitespace) {

@@ -3,8 +3,12 @@ use std::env;
 mod declarations;
 mod script_gen;
 
-include!("declarations.rs");
-include!("script_gen.rs");
+// do we really need to do this? this is causing issues especially with script_gen.
+// include!("declarations.rs");
+// include!("script_gen.rs");
+
+// importing types as needed
+use crate::declarations::{Play, CharName, WHINGE_MODE, Ordering};
 
 fn main() -> Result<(), u8>  {
     println!("Hello, world!");
