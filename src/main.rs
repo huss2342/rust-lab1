@@ -6,7 +6,8 @@ include!("declarations.rs");
 // use std::env;
 // use std::sync::atomic::{AtomicBool, Ordering};
 
-// static WHINGE_MODE: AtomicBool = AtomicBool::new(false);
+// importing types as needed
+use crate::declarations::{Play, CharName, WHINGE_MODE, Ordering};
 
 fn main() -> Result<(), u8>  {
     println!("Hello, world!");
