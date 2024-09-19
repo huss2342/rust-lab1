@@ -12,7 +12,7 @@ static CHARACTER_FILE_CONFIG_LINE_INDEX : usize = 1;
 static CONFIG_LINE_TOKENS : usize = 2;
 
 fn add_script_line(play : &mut Play, line : &String, char_part_name : &String) {
-    if line.is_empty()  { return }
+    if line.is_empty() { return }
 
     let Some((first_token, rest_of_line)) = line.split_once(char::is_whitespace) else {
         return // leave if split_once returns None
