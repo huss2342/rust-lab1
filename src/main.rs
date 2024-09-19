@@ -1,4 +1,5 @@
 mod declarations;
+mod script_gen;
 
 include!("declarations.rs");
 //
