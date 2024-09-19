@@ -1,6 +1,5 @@
 use std::fs::File;
 use std::io::{BufReader, BufRead};
-use crate::declarations::{Play, CharName, WHINGE_MODE, Ordering};
 
 type CharacterTextFile = String;
 type PlayConfig = Vec<(CharName, CharacterTextFile)>;
