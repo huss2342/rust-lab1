@@ -1,11 +1,18 @@
-use std::env;
-use std::sync::atomic::{AtomicBool, Ordering};
+mod declarations;
 
-static WHINGE_MODE: AtomicBool = AtomicBool::new(false);
+include!("declarations.rs");
+//
+// specificly instructed to add above main?
+// use std::env;
+// use std::sync::atomic::{AtomicBool, Ordering};
 
-fn main() {
+// static WHINGE_MODE: AtomicBool = AtomicBool::new(false);
+
+fn main() -> Result<(), u8>  {
     println!("Hello, world!");
 
+    // return Ok(()) for success
+    Ok(())
 }
 
 fn parse_args(config_file_name: &mut String) -> Result<(), u8> {
@@ -29,3 +36,28 @@ fn parse_args(config_file_name: &mut String) -> Result<(), u8> {
 fn usage(program_name: &String) {
     println!("usage: {} <configuration_file_name> [whinge]", program_name);
 }
+
+fn recite(title: &String,  play: &Play) {
+
+    println!("Title is: {}", title);
+
+    // initialize variable for current character
+    let mut current_character: Option<&CharName> = None;
+
+    for line_tuple in play {
+        match line_tuple {
+            // if character doesn't match, assign current character and print blank line
+            (line_num, character, line) => {
+                if Some(character) != current_character {
+                    println!();
+                    // print current character with "." and update current_character
+                    println!("{}.", character);
+                    current_character = Some(character);
+                }
+                // print current character's lines
+                println!("{}", line);
+            }
+        }
+    }
+}
+
