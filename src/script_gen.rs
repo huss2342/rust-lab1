@@ -1,6 +1,5 @@
 use std::fs::File;
 use std::io::{BufReader, BufRead};
-use std::process::exit;
 use crate::declarations::{Play, CharName, WHINGE_MODE, Ordering};
 
 type CharacterTextFile = String;
@@ -62,8 +61,6 @@ fn grab_trimmmed_file_lines(file_name: &String, file_lines: &mut Vec<String>) ->
                 return Err(3)
             }
         }
-        
-    }
 
-    Ok(())
+    }
 }

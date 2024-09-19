@@ -1,11 +1,11 @@
-use std::sync::atomic::AtomicBool;
-pub use std::sync::atomic::Ordering;
+use std::env;
+use std::sync::atomic::{AtomicBool, Ordering};
 
 type LineNum = usize;
-pub type CharName = String;
+type CharName = String;
 type Line = String;
 type LineTuple = (LineNum, CharName, Line);
-pub type Play = Vec<LineTuple>;
+type Play = Vec<LineTuple>;
 
 
 // Minimum and Maximum number of arguments constants
@@ -22,4 +22,4 @@ static BAD_CMD_LINE: u8 = 1;
 static FAILED_TO_GENERATE_SCRIPT: u8 = 2;
 
 // AtomicBool to keep track of if we are whinging
-pub static WHINGE_MODE: AtomicBool = AtomicBool::new(false);
+static WHINGE_MODE: AtomicBool = AtomicBool::new(false);
