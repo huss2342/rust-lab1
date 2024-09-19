@@ -30,6 +30,7 @@ fn add_script_line(play : &mut Play, line : &String, char_part_name : &String) {
                               first_token);
                 },
             }
+
         }
     }
 }
