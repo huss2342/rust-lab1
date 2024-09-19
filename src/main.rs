@@ -46,15 +46,17 @@ fn recite(title: &String,  play: &Play) {
 
     for line_tuple in play {
         match line_tuple {
-            // if character doesn't match, assign current character and print blank line
-            (line_num, character, line) => {
-                if Some(character) != current_character {
-                    println!();
-                    // print current character with "." and update current_character
-                    println!("{}.", character);
-                    current_character = Some(character);
+            // what if character is an empty string? is that possible?
+            (_, character,_ ) if !character.is_empty() => {
+                // do nothing if it's the same character as the current one
+                if Some(character) ==  current_character {
+                    return;
                 }
-                // print current character's lines
+                println!();
+                println!("{}.", character); // print current character with "." after
+                current_character = Some(character); // update current_character
+            }
+            (.., line) => {
                 println!("{}", line);
             }
         }
