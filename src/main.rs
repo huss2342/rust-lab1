@@ -1,6 +1,9 @@
 mod declarations;
+mod script_gen;
 
 include!("declarations.rs");
+include!("script_gen.rs");
+
 //
 // specificly instructed to add above main?
 // use std::env;
