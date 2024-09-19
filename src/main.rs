@@ -48,7 +48,7 @@ fn recite(title: &String,  play: &Play) {
 
     for line_tuple in play {
         match line_tuple {
-            // what if character is an empty string? is that possible?
+            // REVIEW: what if character is an empty string? is that possible?
             (_, character,_ ) if !character.is_empty() => {
                 // do nothing if it's the same character as the current one
                 if Some(character) ==  current_character {
