@@ -32,7 +32,7 @@ fn add_script_line(play: &mut Play, line: &String, char_part_name: &String) {
     }
 }
 
-fn grab_trimmmed_file_lines(file_name: &String, file_lines: &mut Vec<String>) -> Result<(), u8> {
+fn grab_trimmed_file_lines(file_name: &String, file_lines: &mut Vec<String>) -> Result<(), u8> {
     /*
         found this from here because I was having a syntax issue
         https://users.rust-lang.org/t/rust-file-open-error-handling/50681
@@ -62,4 +62,25 @@ fn grab_trimmmed_file_lines(file_name: &String, file_lines: &mut Vec<String>) ->
         }
 
     }
+}
+
+fn process_config(play: &mut Play, play_config: &PlayConfig) -> Result<(), u8>  {
+
+    let mut file_lines_ref: Vec<String> = Vec::new();
+
+    for config in play_config {
+        // match tuple in play_config to destructure
+        match config {
+            (char_name, character_text_file) => {
+                // try to get trimmed lines from file
+                if let Err(_e) = grab_trimmed_file_lines(character_text_file, &mut file_lines_ref) {
+                    return Err(2)
+                }
+                for line in file_lines_ref.iter() {
+                        add_script_line(play, line, char_name);
+                }
+            }
+        }
+    }
+    Ok(())
 }
