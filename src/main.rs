@@ -9,6 +9,7 @@ fn main() -> Result<(), u8>  {
     Ok(())
 }
 
+/// TODO Add function documentation, do this for everything in the future :)
 fn parse_args(config_file_name: &mut String) -> Result<(), u8> {
     let mut args: Vec<String> = Vec::new();
 
@@ -27,10 +28,12 @@ fn parse_args(config_file_name: &mut String) -> Result<(), u8> {
     Ok(())
 }
 
+/// Prints a helpful usage message
 fn usage(program_name: &String) {
     println!("usage: {} <configuration_file_name> [whinge]", program_name);
 }
 
+/// TODO Add function documentation, do this for everything in the future :)
 fn recite(title: &String,  play: &Play) {
 
     println!("Title is: {}", title);
