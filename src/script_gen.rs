@@ -1,12 +1,7 @@
+// TODO: might be able to remove these two imports  below?
+
 use std::fs::File;
 use std::io::{BufReader, BufRead};
-
-// conditionally include declarations.rs if not already including it
-// --> using WHINGE_MODE which is defined in that file
-// #[cfg(not(WHINGE_MODE))]
-// include!("declarations.rs"); // not sure if this is working right but it's making autocomplete work so I'm leaving it for now
-
-// auto complete was being dumb and not working in general but the lines above didn't work for this file :(
 
 type CharacterTextFile = String;
 type PlayConfig = Vec<(CharName, CharacterTextFile)>;
@@ -21,7 +16,7 @@ static CHARACTER_FILE_CONFIG_LINE_INDEX : usize = 1;
 static CONFIG_LINE_TOKENS : usize = 2;
 
 
-/// TODO Add function documentation, do this for everything in the future :)
+// TODO Add function documentation, do this for everything in the future :)
 fn add_script_line(play: &mut Play, line: &String, char_part_name: &String) {
     if line.is_empty() { return }
 
@@ -44,7 +39,7 @@ fn add_script_line(play: &mut Play, line: &String, char_part_name: &String) {
     }
 }
 
-/// TODO Add function documentation, do this for everything in the future :)
+// TODO Add function documentation, do this for everything in the future :)
 fn grab_trimmed_file_lines(file_name: &String, file_lines: &mut Vec<String>) -> Result<(), u8> {
     /*
         found this from here because I was having a syntax issue
@@ -77,7 +72,7 @@ fn grab_trimmed_file_lines(file_name: &String, file_lines: &mut Vec<String>) -> 
     }
 }
 
-/// TODO Add function documentation, do this for everything in the future :)
+// TODO Add function documentation, do this for everything in the future :)
 fn process_config(play: &mut Play, play_config: &PlayConfig) -> Result<(), u8>  {
 
     let mut file_lines_ref: Vec<String> = Vec::new();
@@ -90,13 +85,13 @@ fn process_config(play: &mut Play, play_config: &PlayConfig) -> Result<(), u8>  
                 if let Err(_) = grab_trimmed_file_lines(character_text_file, &mut file_lines_ref) {
                     return Err(2) // FIXME with a constant later
                 }
-                for line in file_lines_ref.iter() {
-                        add_script_line(play, line, char_name);
+                for line in &file_lines_ref {
+                    add_script_line(play, line, char_name);
                 }
             }
         }
     }
-    Ok(()) // Can one of you explain why we put the unit tuple inside Ok()? - Nick
+    Ok(())
 }
 
 /// takes in a line from a config file,
@@ -111,32 +106,53 @@ fn add_config(config_line: &String, play_config: &mut PlayConfig) {
     }
 
     if config_line_tokens.len() >= CONFIG_LINE_TOKENS {
-        play_config.push((config_line_tokens[CHARACTER_NAME_CONFIG_LINE_INDEX].to_string(),
-                            config_line_tokens[CHARACTER_FILE_CONFIG_LINE_INDEX].to_string())); // Hussein, this is why I was trying to keep the static variable names small...
+        // you just have to make it beautiful 🥰
+        play_config.push((
+             config_line_tokens[CHARACTER_NAME_CONFIG_LINE_INDEX].to_string(),
+             config_line_tokens[CHARACTER_FILE_CONFIG_LINE_INDEX].to_string()
+        ));
     }
 }
 
-/// goes through a config file and if it doesn't return an error,
-/// sets the play_title variable that is passed by reference,
-/// then adds all lines to the play_config variable that is passed by reference.
-///
-fn read_config(config_file_name: &String, mut play_title: &mut String,
-               play_config: &mut PlayConfig) -> Result<(), u8> {
+/**
+* goes through a config file and if it doesn't return an error,
+* sets the play_title variable that is passed by reference,
+* then adds all lines to the play_config variable that is passed by reference.
+*/
+fn read_config(
+    config_file_name: &String,
+    play_title: &mut String,
+    play_config: &mut PlayConfig,
+) -> Result<(), u8> {
     let mut lines: Vec<String> = Vec::new();
 
     match grab_trimmed_file_lines(config_file_name, &mut lines) {
-        Err(_) => return Err(FAILED_TO_GENERATE_SCRIPT),
-        Ok(()) => if lines.len() <= CHARACTER_CONFIG_LINE {
-            // return error if not enough lines to generate the script
-            return Err(FAILED_TO_GENERATE_SCRIPT)
-        } else {
-            play_title = lines[TITLE_LINE]; // FIXME no clue why this isn't working
-            for line in &lines { // TODO this needs to start at 1 and I can't remember exactly how to do that
-                add_config(line, play_config);
-            }
-        }
+        Ok(()) =>
+            {
+                // return error if not enough lines to generate the script
+                if lines.len() <= CHARACTER_CONFIG_LINE { return Err(FAILED_TO_GENERATE_SCRIPT) }
+
+                // storing the first line into the string for the title of the play
+                *play_title = lines[TITLE_LINE].clone();
+
+                // adding the remaining lines to the play configuration data structure
+                Ok(for line in &lines[1..] {
+                    add_config(line, play_config)
+                })
+            },
+        Err(_) => return Err(FAILED_TO_GENERATE_SCRIPT)
     }
+}
 
+fn script_gen(play: &mut Play, config_file_name: &String) -> Result<(), u8> {
+    let mut play_config: PlayConfig = vec![];
+    let mut play_title = String::new(); // FIXME not sure about this step tbh
 
-    return Ok(());
+    match read_config(config_file_name, &mut play_title, &mut play_config){
+        Ok(()) => match process_config(play, &play_config)  {
+            Ok(()) => Ok(()),
+            Err(_) => Err(2) // FIXME return an error indicating that script gen failed
+        },
+        Err(_)  => Err(1) // FIXME script generation failed error
+    }
 }
