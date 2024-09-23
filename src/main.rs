@@ -1,11 +1,9 @@
-// do we really need to do this? this is causing issues especially with script_gen.
 include!("declarations.rs");
 include!("script_gen.rs");
 
 fn main() -> Result<(), u8>  {
     println!("Hello, world!");
 
-    // return Ok(()) for success
     Ok(())
 }
 
