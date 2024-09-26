@@ -24,3 +24,9 @@ The second section of your ReadMe.txt file should provide detailed instructions 
     2- build your program(s), and
     3- run your program(s) on the CEC Linux Lab machines where your lab solutions will be evaluated.
 
+---
+#NOTE: 
+
+1) what the submitted program does, 
+2) any places where your solution diverged from what was requested in the assignment, and 
+3) the design decisions you made in developing your code. Please also ask any remaining questions you may have, in your readme file, and feedback on your impressions of the lab (what was easy, what was difficult, suggestions, etc.) is welcome.
