@@ -21,5 +21,6 @@ static OPT_WHINGE_POS: usize = 2;
 static BAD_CMD_LINE: u8 = 1;
 static FAILED_TO_GENERATE_SCRIPT: u8 = 2;
 
+
 // AtomicBool to keep track of if we are whinging
 static WHINGE_MODE: AtomicBool = AtomicBool::new(false);

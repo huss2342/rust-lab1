@@ -1,29 +1,47 @@
 // do we really need to do this? this is causing issues especially with script_gen.
 include!("declarations.rs");
 include!("script_gen.rs");
+use std::fs;
+
+// https://docs.rs/config-file/latest/config_file/
 
 fn main() -> Result<(), u8>  {
-    println!("Hello, world!");
+    // open config file
+    let mut config_file_name = String::new();
 
+    match parse_args(&mut config_file_name) {
+        Ok(()) => {
+            println!("Configuration file name: {}", config_file_name);
+        }
+        Err(..) =>  {
+            println!("Error: Bad command line arguments provided.");
+            // std::process::exit(BAD_CMD_LINE);
+            return Err(BAD_CMD_LINE);
+        }
+    }
     // return Ok(()) for success
     Ok(())
 }
 
+
 fn parse_args(config_file_name: &mut String) -> Result<(), u8> {
+
     let mut args: Vec<String> = Vec::new();
 
     for arg in env::args() {
         args.push(arg);
     }
 
-    if args.len() < 2 || args.len() > 3 || (args.len() == 3 && args[2] != "whinge") {
-        usage(&args[0]);
-        return Err(1);
+    if args.len() < MIN_ARGS || args.len() > MAX_ARGS || (args.len() == MAX_ARGS && args[OPT_WHINGE_POS] != "whinge") {
+        usage(&args[PROG_NAME_POS]);
+        return Err(BAD_CMD_LINE);
     }
 
-    *config_file_name = args[1].clone();
-    WHINGE_MODE.store(true, Ordering::SeqCst);
+    *config_file_name = args[CONFIG_POS].clone();
 
+    if args.len() == MAX_ARGS {
+        WHINGE_MODE.store(true, Ordering::SeqCst);
+    }
     Ok(())
 }
 
