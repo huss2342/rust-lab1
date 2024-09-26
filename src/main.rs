@@ -8,7 +8,7 @@ fn main() -> Result<(), u8>  {
     // open config file
     let mut config_file_name = String::new();
     let mut play_title = String::new();
-    let mut play: Play;
+    let mut play: Play = Vec::new();
 
     match parse_args(&mut config_file_name) {
         Ok(()) => {
