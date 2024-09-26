@@ -7,17 +7,32 @@ use std::fs;
 fn main() -> Result<(), u8>  {
     // open config file
     let mut config_file_name = String::new();
+    let mut play_title = String::new();
+    let mut play: Play;
 
     match parse_args(&mut config_file_name) {
         Ok(()) => {
             println!("Configuration file name: {}", config_file_name);
-        }
-        Err(..) =>  {
-            println!("Error: Bad command line arguments provided.");
+        },
+        Err(_) =>  {
+            eprintln!("Error: Bad command line arguments provided.");
             // std::process::exit(BAD_CMD_LINE);
             return Err(BAD_CMD_LINE);
         }
     }
+
+    match script_gen(&mut play, & config_file_name) {
+        Ok(()) => {
+            play.sort();
+            recite(&play_title, &play);
+        },
+        Err(_) => {
+            eprintln!("Error: Script Generation Failed.");
+            return Err(FAILED_TO_GENERATE_SCRIPT);
+        }
+    }
+
+
     // return Ok(()) for success
     Ok(())
 }
