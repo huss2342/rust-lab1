@@ -21,7 +21,7 @@ fn main() -> Result<(), u8>  {
         }
     }
 
-    match script_gen(&mut play, & config_file_name) {
+    match script_gen(& config_file_name, &mut play_title, &mut play) {
         Ok(()) => {
             play.sort();
             recite(&play_title, &play);

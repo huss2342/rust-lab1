@@ -119,11 +119,8 @@ fn add_config(config_line: &String, play_config: &mut PlayConfig) {
 * sets the play_title variable that is passed by reference,
 * then adds all lines to the play_config variable that is passed by reference.
 */
-fn read_config(
-    config_file_name: &String,
-    play_title: &mut String,
-    play_config: &mut PlayConfig,
-) -> Result<(), u8> {
+fn read_config(config_file_name: &String, play_title: &mut String,
+                play_config: &mut PlayConfig) -> Result<(), u8> {
     let mut lines: Vec<String> = Vec::new();
 
     match grab_trimmed_file_lines(config_file_name, &mut lines) {
@@ -144,9 +141,9 @@ fn read_config(
     }
 }
 
-fn script_gen(play: &mut Play, config_file_name: &String) -> Result<(), u8> {
+fn script_gen(config_file_name: &String, mut play_title: &mut String,
+                play: &mut Play) -> Result<(), u8> {
     let mut play_config: PlayConfig = vec![];
-    let mut play_title = String::new(); // FIXME not sure about this step tbh
 
     match read_config(config_file_name, &mut play_title, &mut play_config){
         Ok(()) => match process_config(play, &play_config)  {
