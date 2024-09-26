@@ -1,6 +1,6 @@
 include!("declarations.rs");
 include!("script_gen.rs");
-use std::fs;
+// use std::fs;
 
 // https://docs.rs/config-file/latest/config_file/
 
@@ -75,17 +75,17 @@ fn recite(title: &String,  play: &Play) {
     for line_tuple in play {
         match line_tuple {
             // REVIEW: what if character is an empty string? is that possible?
-            (_, character,_ ) if !character.is_empty() => {
+            (_, character,line ) if !character.is_empty() => {
                 // do nothing if it's the same character as the current one
-                if Some(character) ==  current_character {
-                    return;
+                if Some(character) != current_character {
+                    println!();
+                    println!("{}.", character); // print current character with "." after
                 }
-                println!();
-                println!("{}.", character); // print current character with "." after
                 current_character = Some(character); // update current_character
-            }
-            (.., line) => {
                 println!("{}", line);
+            }
+            (..) => {
+                return;
             }
         }
     }

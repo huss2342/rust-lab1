@@ -24,6 +24,7 @@ fn add_script_line(play: &mut Play, line: &String, char_part_name: &String) {
         return // leave if split_once returns None
     };
 
+    // TODO I'm a bit unsure of if shadowing is a good idea here
     let first_token = first_token.trim();
     let rest_of_line = rest_of_line.trim();
 
@@ -75,9 +76,11 @@ fn grab_trimmed_file_lines(file_name: &String, file_lines: &mut Vec<String>) -> 
 // TODO Add function documentation, do this for everything in the future :)
 fn process_config(play: &mut Play, play_config: &PlayConfig) -> Result<(), u8>  {
 
-    let mut file_lines_ref: Vec<String> = Vec::new();
+
 
     for config in play_config {
+        let mut file_lines_ref: Vec<String> = Vec::new();
+
         // match tuple in play_config to destructure
         match config {
             (char_name, character_text_file) => {
