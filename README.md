@@ -1,4 +1,8 @@
 # FIX at the end:
+
+Becky said: Completed tests on reading file with whinge, extra arguments, no argument, and misspelled arguments
+
+
 - ### need to add an enum and replace error numbers in Err(1)
 - ### go through *REVIEW: , TODO, FIXME* comments
 - ### remove unnecessary comments
@@ -19,3 +23,4 @@ The second section of your ReadMe.txt file should provide detailed instructions 
     1- unzip or otherwise unpack your files,
     2- build your program(s), and
     3- run your program(s) on the CEC Linux Lab machines where your lab solutions will be evaluated.
+
