@@ -1,4 +1,3 @@
-use std::env;
 use std::sync::atomic::{AtomicBool, Ordering};
 
 type LineNum = usize;
@@ -6,7 +5,6 @@ type CharName = String;
 type Line = String;
 type LineTuple = (LineNum, CharName, Line);
 type Play = Vec<LineTuple>;
-
 
 // Minimum and Maximum number of arguments constants
 static MIN_ARGS: usize = 2;

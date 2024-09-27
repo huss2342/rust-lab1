@@ -14,40 +14,32 @@ static CHARACTER_FILE_CONFIG_LINE_INDEX: usize = 1;
 static CONFIG_LINE_TOKENS: usize = 2;
 
 
-// TODO Add function documentation, do this for everything in the future :)
 fn add_script_line(play: &mut Play, line: &String, char_part_name: &String) {
-    // skip empty lines
-    if line.is_empty() {
-        return;
-    }
+    if line.is_empty() { return; }
 
-    if let Some((first_token, rest_of_line)) = line.split_once(char::is_whitespace) {
-        // TODO I'm a bit unsure of if shadowing is a good idea here
-        let first_token = first_token.trim();
-        let rest_of_line = rest_of_line.trim();
-
-
-        // match the result of parsing and if successful, push the line into the play
-        match first_token.parse::<usize>() {
-            // successfully parsed. add line to play
-            Ok(line_num) =>
-                play.push((line_num, char_part_name.to_string(), rest_of_line.to_string())),
-           // failed to parse as usize, check WHINGE_MODE
-            Err(..) => if WHINGE_MODE.load(Ordering::SeqCst) {
-                eprintln!("[X] ERROR: The token \"{}\" does not represent a valid usize value.",
-                          first_token);
-            }
-        }
-    } else {
+    let Some((first_token, rest_of_line)) = line.split_once(char::is_whitespace) else {
         // Badly formed line, no whitespace split
         if WHINGE_MODE.load(Ordering::SeqCst) {
-            eprintln!("[X] ERROR: The line '{}' is badly formed and will be skipped.", line);
+            eprintln!("[X] ERROR: The line '{}' is badly formed and will be skipped.", line)
+        }
+        return;
+    };
+
+    let first_token = first_token.trim();
+    let rest_of_line = rest_of_line.trim();
+
+    // match the result of parsing and if successful, push the line into the play
+    match first_token.parse::<usize>() {
+        Ok(line_num) =>
+            play.push((line_num, char_part_name.to_string(), rest_of_line.to_string())),
+        Err(..) => if WHINGE_MODE.load(Ordering::SeqCst) {
+            eprintln!("[X] ERROR: The token \"{}\" does not represent a valid usize value.",
+                      first_token);
         }
     }
 }
 
 
-// TODO Add function documentation, do this for everything in the future :)
 fn grab_trimmed_file_lines(file_name: &String, file_lines: &mut Vec<String>) -> Result<(), u8> {
     /*
         found this from here because I was having a syntax issue
@@ -57,7 +49,7 @@ fn grab_trimmed_file_lines(file_name: &String, file_lines: &mut Vec<String>) -> 
         Ok(file) => file,
         Err(e) => {
             eprintln!("[X] ERROR: Failed to open file '{}': {}", file_name, e);
-            return Err(FAILED_TO_GENERATE_SCRIPT); 
+            return Err(FAILED_TO_GENERATE_SCRIPT);
         }
     };
 
@@ -69,11 +61,10 @@ fn grab_trimmed_file_lines(file_name: &String, file_lines: &mut Vec<String>) -> 
         line.clear();
         match reader.read_line(&mut line) {
             Ok(0) => return Ok(()), // indicates success
-            // REVIEW: is it possible that we push an empty line here?
             Ok(..) => file_lines.push(line.trim().to_string()),
             Err(e) => {
                 eprintln!("[X] ERROR: Failed to read line '{}': {}", file_name, e);
-                return Err(FAILED_TO_GENERATE_SCRIPT); 
+                return Err(FAILED_TO_GENERATE_SCRIPT);
             }
         }
     }
@@ -91,7 +82,7 @@ fn process_config(play: &mut Play, play_config: &PlayConfig) -> Result<(), u8> {
             (char_name, character_text_file) => {
                 // try to get trimmed lines from file
                 if let Err(..) = grab_trimmed_file_lines(character_text_file, &mut file_lines_ref) {
-                    return Err(FAILED_TO_GENERATE_SCRIPT); 
+                    return Err(FAILED_TO_GENERATE_SCRIPT);
                 }
                 for line in &file_lines_ref {
                     add_script_line(play, line, char_name);
@@ -102,8 +93,8 @@ fn process_config(play: &mut Play, play_config: &PlayConfig) -> Result<(), u8> {
     Ok(())
 }
 
-/// takes in a line from a config file,
-/// then pushes the tokens to the PlayConfig variable that is passed in by reference
+// takes in a line from a config file,
+// then pushes the tokens to the PlayConfig variable that is passed in by reference
 fn add_config(config_line: &String, play_config: &mut PlayConfig) {
     let config_line_tokens: Vec<&str> = config_line.split_whitespace().collect();
 
@@ -121,10 +112,10 @@ fn add_config(config_line: &String, play_config: &mut PlayConfig) {
     }
 }
 
-/**
-* goes through a config file and if it doesn't return an error,
-* sets the play_title variable that is passed by reference,
-* then adds all lines to the play_config variable that is passed by reference.
+/*
+ goes through a config file and if it doesn't return an error,
+ sets the play_title variable that is passed by reference,
+ then adds all lines to the play_config variable that is passed by reference.
 */
 fn read_config(config_file_name: &String, play_title: &mut String,
                play_config: &mut PlayConfig) -> Result<(), u8> {
@@ -136,7 +127,6 @@ fn read_config(config_file_name: &String, play_title: &mut String,
                 // return error if not enough lines to generate the script
                 if lines.len() <= CHARACTER_CONFIG_LINE { return Err(FAILED_TO_GENERATE_SCRIPT); }
 
-                // storing the first line into the string for the title of the play
                 *play_title = lines[TITLE_LINE].clone();
 
                 // adding the remaining lines to the play configuration data structure
@@ -155,8 +145,8 @@ fn script_gen(config_file_name: &String, mut play_title: &mut String,
     match read_config(config_file_name, &mut play_title, &mut play_config) {
         Ok(()) => match process_config(play, &play_config) {
             Ok(()) => Ok(()),
-            Err(..) => Err(FAILED_TO_GENERATE_SCRIPT) 
+            Err(..) => Err(FAILED_TO_GENERATE_SCRIPT)
         },
-        Err(..) => Err(FAILED_TO_GENERATE_SCRIPT) 
+        Err(..) => Err(FAILED_TO_GENERATE_SCRIPT)
     }
 }

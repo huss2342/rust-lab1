@@ -1,6 +1,8 @@
 include!("declarations.rs");
 include!("script_gen.rs");
 
+use std::env;
+
 fn main() -> Result<(), u8> {
     // open config file
     let mut config_file_name = String::new();
@@ -30,7 +32,6 @@ fn main() -> Result<(), u8> {
     }
 }
 
-/// TODO Add function documentation, do this for everything in the future :)
 fn parse_args(config_file_name: &mut String) -> Result<(), u8> {
     let mut args: Vec<String> = Vec::new();
 
@@ -52,7 +53,7 @@ fn parse_args(config_file_name: &mut String) -> Result<(), u8> {
     Ok(())
 }
 
-/// Prints a helpful usage message
+// Prints a helpful usage message
 fn usage(program_name: &String) {
     println!("usage: {} <configuration_file_name> [whinge]", program_name);
 }
@@ -63,21 +64,21 @@ fn usage(program_name: &String) {
 fn recite(title: &String, play: &Play) {
     println!("{}", title);
 
-    // initialize variable for current character
     let mut current_character: Option<&CharName> = None;
-    // used for reference: https://doc.rust-lang.org/rust-by-example/flow_control/match/destructuring/destructure_tuple.html
+
+    // used for reference:
+    // https://doc.rust-lang.org/rust-by-example/flow_control/match/destructuring/destructure_tuple.html
     for line_tuple in play {
         match line_tuple {
-            (_, character, line) if !character.is_empty() => {
-                // do nothing if it's the same character as the current one
+            (_, character, line) => {
+                // if the character changes
                 if Some(character) != current_character {
                     println!();
-                    println!("{}.", character); // print current character with "." after
+                    println!("{}.", character);
                 }
-                current_character = Some(character); // update current_character
+                current_character = Some(character);
                 println!("{}", line);
             }
-            _ => return
         }
     }
 }
