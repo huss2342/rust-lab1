@@ -38,7 +38,8 @@ fn parse_args(config_file_name: &mut String) -> Result<(), u8> {
         args.push(arg);
     }
 
-    if args.len() < MIN_ARGS || args.len() > MAX_ARGS || (args.len() == MAX_ARGS && args[OPT_WHINGE_POS] != "whinge") {
+    if args.len() < MIN_ARGS || args.len() > MAX_ARGS ||
+        (args.len() == MAX_ARGS && args[OPT_WHINGE_POS] != "whinge") {
         usage(&args[PROG_NAME_POS]);
         return Err(BAD_CMD_LINE);
     }
@@ -56,16 +57,17 @@ fn usage(program_name: &String) {
     println!("usage: {} <configuration_file_name> [whinge]", program_name);
 }
 
-/// TODO Add function documentation, do this for everything in the future :)
+
+// Iterates through Play vector, prints the title, tracks the current character,
+// prints character names when they change, and outputs corresponding dialogue.
 fn recite(title: &String, play: &Play) {
-    println!("Title is: {}", title);
+    println!("{}", title);
 
     // initialize variable for current character
     let mut current_character: Option<&CharName> = None;
-
+    // used for reference: https://doc.rust-lang.org/rust-by-example/flow_control/match/destructuring/destructure_tuple.html
     for line_tuple in play {
         match line_tuple {
-            // REVIEW: what if character is an empty string? is that possible?
             (_, character, line) if !character.is_empty() => {
                 // do nothing if it's the same character as the current one
                 if Some(character) != current_character {

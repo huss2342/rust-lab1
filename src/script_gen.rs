@@ -16,26 +16,36 @@ static CONFIG_LINE_TOKENS: usize = 2;
 
 // TODO Add function documentation, do this for everything in the future :)
 fn add_script_line(play: &mut Play, line: &String, char_part_name: &String) {
-    if line.is_empty() { return }
+    // skip empty lines
+    if line.is_empty() {
+        return;
+    }
 
-    let Some((first_token, rest_of_line)) = line.split_once(char::is_whitespace) else {
-        return // leave if split_once returns None
-    };
+    if let Some((first_token, rest_of_line)) = line.split_once(char::is_whitespace) {
+        // TODO I'm a bit unsure of if shadowing is a good idea here
+        let first_token = first_token.trim();
+        let rest_of_line = rest_of_line.trim();
 
-    // TODO I'm a bit unsure of if shadowing is a good idea here
-    let first_token = first_token.trim();
-    let rest_of_line = rest_of_line.trim();
 
-    // match the result of parsing and if successful, push the line into the play
-    match first_token.parse::<usize>() {
-        Ok(line_num) =>
-            play.push((line_num, char_part_name.to_string(), rest_of_line.to_string())),
-        Err(..) => if WHINGE_MODE.load(Ordering::SeqCst) {
-            eprintln!("[X] ERROR: The token \"{}\" does not represent a valid usize value.",
-                      first_token);
-        },
+        // match the result of parsing and if successful, push the line into the play
+        match first_token.parse::<usize>() {
+            // successfully parsed. add line to play
+            Ok(line_num) =>
+                play.push((line_num, char_part_name.to_string(), rest_of_line.to_string())),
+           // failed to parse as usize, check WHINGE_MODE
+            Err(..) => if WHINGE_MODE.load(Ordering::SeqCst) {
+                eprintln!("[X] ERROR: The token \"{}\" does not represent a valid usize value.",
+                          first_token);
+            }
+        }
+    } else {
+        // Badly formed line, no whitespace split
+        if WHINGE_MODE.load(Ordering::SeqCst) {
+            eprintln!("[X] ERROR: The line '{}' is badly formed and will be skipped.", line);
+        }
     }
 }
+
 
 // TODO Add function documentation, do this for everything in the future :)
 fn grab_trimmed_file_lines(file_name: &String, file_lines: &mut Vec<String>) -> Result<(), u8> {
@@ -47,7 +57,7 @@ fn grab_trimmed_file_lines(file_name: &String, file_lines: &mut Vec<String>) -> 
         Ok(file) => file,
         Err(e) => {
             eprintln!("[X] ERROR: Failed to open file '{}': {}", file_name, e);
-            return Err(2); // FIXME with a constant later
+            return Err(FAILED_TO_GENERATE_SCRIPT); 
         }
     };
 
@@ -63,13 +73,15 @@ fn grab_trimmed_file_lines(file_name: &String, file_lines: &mut Vec<String>) -> 
             Ok(..) => file_lines.push(line.trim().to_string()),
             Err(e) => {
                 eprintln!("[X] ERROR: Failed to read line '{}': {}", file_name, e);
-                return Err(3); // FIXME with a constant later
+                return Err(FAILED_TO_GENERATE_SCRIPT); 
             }
         }
     }
 }
 
-// TODO Add function documentation, do this for everything in the future :)
+// reads character scripts from files in play_config and appends the lines
+// associated with corresponding character to Play vector,
+// if file fails to be processed, return error.
 fn process_config(play: &mut Play, play_config: &PlayConfig) -> Result<(), u8> {
     for config in play_config {
         let mut file_lines_ref: Vec<String> = Vec::new();
@@ -79,7 +91,7 @@ fn process_config(play: &mut Play, play_config: &PlayConfig) -> Result<(), u8> {
             (char_name, character_text_file) => {
                 // try to get trimmed lines from file
                 if let Err(..) = grab_trimmed_file_lines(character_text_file, &mut file_lines_ref) {
-                    return Err(2); // FIXME with a constant later
+                    return Err(FAILED_TO_GENERATE_SCRIPT); 
                 }
                 for line in &file_lines_ref {
                     add_script_line(play, line, char_name);
@@ -143,8 +155,8 @@ fn script_gen(config_file_name: &String, mut play_title: &mut String,
     match read_config(config_file_name, &mut play_title, &mut play_config) {
         Ok(()) => match process_config(play, &play_config) {
             Ok(()) => Ok(()),
-            Err(..) => Err(2) // FIXME return an error indicating that script gen failed
+            Err(..) => Err(FAILED_TO_GENERATE_SCRIPT) 
         },
-        Err(..) => Err(1) // FIXME script generation failed error
+        Err(..) => Err(FAILED_TO_GENERATE_SCRIPT) 
     }
 }
