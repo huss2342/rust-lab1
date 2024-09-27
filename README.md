@@ -1,5 +1,6 @@
 # CSE 542 Fall 2024 Lab 1
---
+---
+
 ### Hussein Aljorani: a.hussein@wustl.edu
 ### Nick Cockran: c.nick@wustl.edu
 ### Becky Shofner: r.a.shofner@wustl.edu
