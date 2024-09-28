@@ -20,7 +20,7 @@ fn add_script_line(play: &mut Play, line: &String, char_part_name: &String) {
     let Some((first_token, rest_of_line)) = line.split_once(char::is_whitespace) else {
         // Badly formed line, no whitespace split
         if WHINGE_MODE.load(Ordering::SeqCst) {
-            eprintln!("[X] ERROR: The line '{}' is badly formed and will be skipped.", line)
+            eprintln!("ERROR: The line '{}' is badly formed and will be skipped.", line)
         }
         return;
     };
@@ -33,7 +33,7 @@ fn add_script_line(play: &mut Play, line: &String, char_part_name: &String) {
         Ok(line_num) =>
             play.push((line_num, char_part_name.to_string(), rest_of_line.to_string())),
         Err(..) => if WHINGE_MODE.load(Ordering::SeqCst) {
-            eprintln!("[X] ERROR: The token \"{}\" does not represent a valid usize value.",
+            eprintln!("ERROR: The token \"{}\" does not represent a valid usize value.",
                       first_token);
         }
     }
@@ -48,7 +48,7 @@ fn grab_trimmed_file_lines(file_name: &String, file_lines: &mut Vec<String>) -> 
     let file = match File::open(file_name) {
         Ok(file) => file,
         Err(e) => {
-            eprintln!("[X] ERROR: Failed to open file '{}': {}", file_name, e);
+            eprintln!("ERROR: Failed to open file '{}': {}", file_name, e);
             return Err(FAILED_TO_GENERATE_SCRIPT);
         }
     };
@@ -63,7 +63,7 @@ fn grab_trimmed_file_lines(file_name: &String, file_lines: &mut Vec<String>) -> 
             Ok(0) => return Ok(()), // indicates success
             Ok(..) => file_lines.push(line.trim().to_string()),
             Err(e) => {
-                eprintln!("[X] ERROR: Failed to read line '{}': {}", file_name, e);
+                eprintln!("ERROR: Failed to read line '{}': {}", file_name, e);
                 return Err(FAILED_TO_GENERATE_SCRIPT);
             }
         }
@@ -72,7 +72,7 @@ fn grab_trimmed_file_lines(file_name: &String, file_lines: &mut Vec<String>) -> 
 
 // reads character scripts from files in play_config and appends the lines
 // associated with corresponding character to Play vector,
-// if file fails to be processed, return error.
+// if file fails to be processed, return ERROR.
 fn process_config(play: &mut Play, play_config: &PlayConfig) -> Result<(), u8> {
     for config in play_config {
         let mut file_lines_ref: Vec<String> = Vec::new();
@@ -113,7 +113,7 @@ fn add_config(config_line: &String, play_config: &mut PlayConfig) {
 }
 
 /*
- goes through a config file and if it doesn't return an error,
+ goes through a config file and if it doesn't return an ERROR,
  sets the play_title variable that is passed by reference,
  then adds all lines to the play_config variable that is passed by reference.
 */
@@ -150,3 +150,4 @@ fn script_gen(config_file_name: &String, mut play_title: &mut String,
         Err(..) => Err(FAILED_TO_GENERATE_SCRIPT)
     }
 }
+

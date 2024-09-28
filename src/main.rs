@@ -14,7 +14,7 @@ fn main() -> Result<(), u8> {
             println!("Configuration file name: {}", config_file_name);
         }
         Err(..) => {
-            eprintln!("Error: Bad command line arguments provided.");
+            eprintln!("ERROR: Bad command line arguments provided.");
             return Err(BAD_CMD_LINE);
         }
     }
@@ -26,7 +26,7 @@ fn main() -> Result<(), u8> {
             Ok(())
         }
         Err(..) => {
-            eprintln!("Error: Script Generation Failed.");
+            eprintln!("ERROR: Script Generation Failed.");
             Err(FAILED_TO_GENERATE_SCRIPT)
         }
     }

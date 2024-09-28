@@ -6,17 +6,30 @@
 - Becky Shofner: r.a.shofner@wustl.edu
 
 ##  Overview
-This program reads a configuration file that defines the title of a play and maps character names to their corresponding 
+This program reads a configuration file that defines the title of a play and maps character names to their 
+corresponding script files. It processes these script files to generate a formatted output, simulating the
+recitation of a scene from a play. Our configuration file is for a portion of "Rosencrantz and Guildenstern are Dead".
 
-script files. It processes these script files to generate a formatted output, simulating the recitation of a scene from the play "Rosencrantz and Guildenstern are Dead".
-
-Due to the modularity of the project, our program was designed with a step-by-step approach, where each team member was responsible for completing a specific part before passing it on to the next. We used GitHub for version control and communication to ensure smooth collaboration. Testing involved fuzzing input files by introducing extra tokens, malformed lines, incorrect tokens, and additional whitespace to ensure robust error handling.
-    
-## Issues/Concerns:
-Program takes in a false named file and tries to read it instead of exiting with error message BAD_CMD_LINE
+Due to the modularity of the project, team members were responsible for completing specific parts of the assignment.
+Each person did a step from the instructions and then passed it on to the next person. We used GitHub for version 
+control and communication to ensure smooth collaboration. Testing involved fuzzing input files by introducing extra 
+tokens, malformed lines, incorrect tokens, and additional whitespace to ensure proper error handling.
 
 ## Insights, observations and questions encountered:
-The match construct in Rust proved to be a powerful tool, particularly for destructuring tuples within vectors. However, finding good examples to guide its use in our specific scenario was challenging. Some directions in the assignment were slightly ambiguous, which led to different interpretations among team members. We addressed this by communicating frequently to align our approaches and clarify any misunderstandings. In hindsight, testing earlier in the process would have allowed us to catch issues sooner and refine our interpretations more efficiently. For future projects, earlier testing and more structured collaboration will be key improvements.
+The match construct in Rust proved to be a powerful tool, particularly for destructuring tuples within vectors. 
+However, finding good examples to guide its use in our specific scenario was challenging. 
+Some directions in the assignment were slightly ambiguous, which led to different interpretations 
+among team members. We addressed this by communicating frequently to align our approaches. Additionally,
+using the debugger to help see what the variables were passing/storing helped a lot.
+
+## Tests Run
+1. Run config file from terminal using incorrect file name
+2. Mis-spelling of file name and/or "whinge"
+3. Additional or less arguments in command line
+4. Misspelling of tokens in config file
+5. Removal and addition of number of tokens in config file 
+6. Addition and removal of whitespace in both config and text files
+7. Removal of number token or script line in text file
 
 ## Usage
 1. Unzip the project folder.
@@ -33,5 +46,4 @@ The match construct in Rust proved to be a powerful tool, particularly for destr
     ```
     cargo run hamlet_ii_2_config.txt whinge
     ```
-    
-    
+  
