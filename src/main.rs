@@ -10,14 +10,12 @@ fn main() -> Result<(), u8> {
     let mut play: Play = Vec::new();
 
     match parse_args(&mut config_file_name) {
-        Ok(()) => {
-            println!("Configuration file name: {}", config_file_name);
-        }
+        Ok(()) => { }
         Err(..) => {
             eprintln!("ERROR: Bad command line arguments provided.");
             return Err(BAD_CMD_LINE);
         }
-    }
+    };
 
     match script_gen(&config_file_name, &mut play_title, &mut play) {
         Ok(()) => {
